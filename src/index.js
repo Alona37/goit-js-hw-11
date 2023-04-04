@@ -27,11 +27,11 @@ const onSearchSubmit = async event => {
 
   try {
     const { data } = await pixabayAPI.fetchGallery();
-
     if (!data.hits.length) {
       erorrQuery();
       return;
     }
+    clearGalleryEl();
     Notify.success(`Hooray! We found ${data.total} images.`);
     refs.galleryEl.innerHTML = cardTemplate(data.hits);
     loadMorBtnEnable();
@@ -42,7 +42,6 @@ const onSearchSubmit = async event => {
       accessQuery();
       return;
     }
-
     const { height: cardHeight } = document
       .querySelector('.gallery')
       .firstElementChild.getBoundingClientRect();
@@ -79,9 +78,9 @@ refs.formEl.addEventListener('submit', onSearchSubmit);
 refs.loadMoreBtn.addEventListener('click', onLoadMoreBtnClick);
 refs.toTopBtn.addEventListener('click', onTopScroll);
 
-// function clearGalleryEl() {
-//   refs.galleryContainer.innerHTML = '';
-// }
+function clearGalleryEl() {
+  refs.galleryEl.innerHTML = '';
+}
 
 function loadMorBtnDisable() {
   refs.loadMoreBtn.classList.add('is-hidden');
