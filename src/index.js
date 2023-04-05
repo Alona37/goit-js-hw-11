@@ -24,14 +24,20 @@ const onSearchSubmit = async event => {
 
   const searchQuery = event.currentTarget.elements['searchQuery'].value.trim();
   pixabayAPI.searchQuery = searchQuery;
+  pixabayAPI.page = 1;
+  clearGalleryEl();
+  loadMorBtnDisable();
+  toTopBtnDisable();
 
   try {
     const { data } = await pixabayAPI.fetchGallery();
+
     if (!data.hits.length) {
       erorrQuery();
+      clearGalleryEl();
       return;
     }
-    clearGalleryEl();
+
     Notify.success(`Hooray! We found ${data.total} images.`);
     refs.galleryEl.innerHTML = cardTemplate(data.hits);
     loadMorBtnEnable();
@@ -42,15 +48,8 @@ const onSearchSubmit = async event => {
       accessQuery();
       return;
     }
-    const { height: cardHeight } = document
-      .querySelector('.gallery')
-      .firstElementChild.getBoundingClientRect();
-
-    window.scrollBy({
-      top: cardHeight * -100,
-      behavior: 'smooth',
-    });
     lightbox.refresh();
+    scrollPage();
   } catch (error) {
     console.log(error);
   }
@@ -91,6 +90,10 @@ function loadMorBtnEnable() {
 function toTopBtnEnable() {
   refs.toTopBtn.classList.remove('is-hidden');
 }
+function toTopBtnDisable() {
+  refs.toTopBtn.classList.add('is-hidden');
+}
+
 function erorrQuery() {
   Notify.failure(
     'Sorry, there are no images matching your search query. Please try again.'
@@ -102,6 +105,16 @@ function accessQuery() {
 
 function endOfSearch() {
   Notify.info("We're sorry, but you've reached the end of search results.");
+}
+
+function scrollPage() {
+  const { height: cardHeight } =
+    refs.galleryContainer.firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
 }
 
 function onTopScroll() {
