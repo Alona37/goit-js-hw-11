@@ -80,10 +80,6 @@ refs.formEl.addEventListener('submit', onSearchSubmit);
 refs.loadMoreBtn.addEventListener('click', onLoadMoreBtnClick);
 refs.toTopBtn.addEventListener('click', onTopScroll);
 
-function clearGalleryEl() {
-  refs.galleryEl.innerHTML = '';
-}
-
 function loadMorBtnDisable() {
   refs.loadMoreBtn.classList.add('is-hidden');
 }
@@ -95,6 +91,9 @@ function toTopBtnEnable() {
 }
 function toTopBtnDisable() {
   refs.toTopBtn.classList.add('is-hidden');
+}
+function clearGalleryEl() {
+  refs.galleryEl.innerHTML = '';
 }
 
 function erorrQuery() {
